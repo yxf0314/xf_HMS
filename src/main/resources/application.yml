@@ -16,4 +16,4 @@ spring:
     host: smtp.qq.com
     username: 1433068154@qq.com
     #设置密码,指的是smtp的授权码
-    password: jtprijjzlhvhiijg
+    password: 
