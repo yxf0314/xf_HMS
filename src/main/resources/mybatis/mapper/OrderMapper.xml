@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xf.dao.OrderMapper">
+    <select id="SelectOrder" resultType="Order" parameterType="Map">
+     select * from 预订记录
+      <where>
+        <if test="typename != null and typename != '' and typename != '请选择'">
+            and typename = #{typename}
+        </if>
+        <if test="gname != null and gname != ''">
+            and gname = #{gname}
+        </if>
+        <if test="gphone != null and gphone != ''">
+            and gphone = #{gphone}
+        </if>
+       </where>
+    </select>
+    <insert id="AddOrder" parameterType="Order">
+        insert into 预订记录
+        values (#{gname},#{typename},#{indate},#{outdate},#{gphone})
+    </insert>
+    <select id="leastroom" resultType="int" parameterType="String">
+        select count(RoomType) from 房间信息 where RoomType=#{typename} and state='可入住'
+    </select>
+    <delete id="checkorder" parameterType="int">
+        delete from 预订记录 where id=#{id}
+    </delete>
+</mapper>

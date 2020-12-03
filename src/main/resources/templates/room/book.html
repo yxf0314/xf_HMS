@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+
+</head>
+
+<body>
+    <div>
+        <form class="layui-form" th:action="@{/selectforbook}">
+            <div class="layui-form-item layui-col-md6 layui-col-sm12 layui-row">
+                <label for="type">房间类型</label>
+
+                <div class="layui-input-block">
+                    <select id="type" lay-verify="required" name="TypeName" >
+                        <option>请选择</option>
+                        <option  th:each="type:${typelist}" th:text="${type.getTypeName()}" th:value="${type.getTypeName()}"></option>
+                    </select>
+                </div>
+            </div>
+        <div class="layui-form-item layui-col-md6 layui-col-sm12">
+            <label for="InputFloor">所在楼层</label>
+            <input name="Floor" type="text" class="layui-input" id="InputFloor" placeholder="楼层">
+        </div>
+        <div class="layui-row">
+            <button type="submit" class="layui-btn layui-btn-normal">提交</button>
+        </div>
+        </form>
+
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>房间类型</th>
+                <th>房间号</th>
+                <th>房间楼层</th>
+                <th>入住情况</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="emp:${rooms}">
+                <td th:text="${emp.getRoomType()}"></td>
+                <td th:text="${emp.getRoomId()}"></td>
+                <td th:text="${emp.getFloor()}"></td>
+                <td th:text="${emp.getState()}"></td>
+                <td>
+                    <a class="layui-btn layui-btn-normal" th:href="@{/live_in/}+${emp.getRoomId()}">入住</a>
+                    <a class="layui-btn layui-btn-normal" th:href="@{/live_out/}+${emp.getRoomId()}">退房</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <a th:if="${pageInfo.pageNum==1}" href="#">上一页</a>
+                <a th:if="${pageInfo.pageNum>1}" th:href="@{/bookrooms(pageNum=${pageInfo.prePage},pageSize=${pageInfo.pageSize})}">上一页</a>
+            </li>
+            <li></li>
+            <li>
+                <a th:if="${pageInfo.pageNum==pageInfo.size}" href="#">下一页</a>
+                <a th:if="${pageInfo.pageNum<pageInfo.size}" th:href="@{/bookrooms(pageNum=${pageInfo.nextPage},pageSize=${pageInfo.pageSize})}">下一页</a>
+            </li>
+        </ul>
+    </div>
+
+    <script th:src="@{/layuiadmin/layui/layui.js}"></script>
+    <script>
+        //Demo
+        layui.use('form', function(){
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formDemo)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

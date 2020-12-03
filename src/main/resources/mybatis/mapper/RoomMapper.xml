@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xf.dao.RoomMapper">
+    <select id="SelectAllRoom" resultType="Room" parameterType="Map">
+        select * from 房间信息
+        <where>
+            <if test="TypeName != null and TypeName != '' and TypeName != '请选择'">
+               and RoomType = #{TypeName}
+            </if>
+            <if test="Floor != null">
+                and floor = #{Floor}
+            </if>
+        </where>
+    </select>
+    <select id="ID_Select" resultType="Room" >
+        select * from 房间信息 where RoomId=#{RoomId}
+    </select>
+    <insert id="addRoom" parameterType="Room">
+        insert into 房间信息 values (#{RoomType},#{RoomId},#{floor},#{state})
+    </insert>
+    <delete id="deleteRoom" parameterType="int">
+        delete 房间信息 where RoomId=#{RoomId}
+    </delete>
+    <update id="updateState_in" parameterType="int">
+        update 房间信息 set state='已入住' where RoomId=#{RoomId}
+    </update>
+    <update id="updateState_out" parameterType="int">
+        update 房间信息 set state='可入住' where RoomId=#{RoomId}
+    </update>
+    <update id="updateRoom" parameterType="Room">
+        update 房间信息 set RoomType=#{RoomType},floor=#{floor},state=#{state} where RoomId=#{RoomId}
+    </update>
+
+
+</mapper>

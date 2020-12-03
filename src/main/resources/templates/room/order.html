@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+	<link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+
+</head>
+
+	<body>
+	<div>
+		<!--
+		先查出房间类型,做一个下拉框,添加下拉框点击事件,用mybatis做动态sql
+		-->
+		<form class="layui-form" th:action="@{/selectfororders}">
+			<div class="layui-form-item layui-col-md6 layui-col-sm12 layui-row">
+				<label for="type">房间类型</label>
+
+				<div class="layui-input-block">
+					<select id="type" lay-verify="required" name="TypeName" >
+						<option>请选择</option>
+						<option  th:each="type:${typelist}" th:text="${type.getTypeName()}" th:value="${type.getTypeName()}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-md6 layui-col-sm12">
+				<label for="gname">预订人姓名</label>
+				<input name="gname" type="text" class="layui-input" id="gname" placeholder="预订人姓名">
+			</div>
+			<div class="layui-form-item layui-col-md6 layui-col-sm12">
+				<label for="gphone">预订人电话</label>
+				<input name="gphone" type="text" class="layui-input" id="gphone" placeholder="预订人姓名">
+			</div>
+			<div class="layui-row">
+				<button type="submit" class="layui-btn layui-btn-normal">提交</button>
+			</div>
+		</form>
+	</div>
+	<div>
+		<table class="layui-table">
+			<thead>
+			<tr>
+				<th>入住人姓名</th>
+				<th>预订房间类型</th>
+				<th>电话</th>
+				<th>入住日期</th>
+				<th>离店日期</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="temp:${orders}">
+				<td th:text="${temp.getGname()}"></td>
+				<td th:text="${temp.getTypename()}"></td>
+				<td th:text="${temp.getGphone()}"></td>
+				<td th:text="${temp.getIndate()}"></td>
+				<td th:text="${temp.getOutdate()}"></td>
+				<td>
+
+<!--					<a class="layui-btn layui-btn-normal" th:href="@{/toUpdate/}+${temp.getRoomId()}">编辑</a>-->
+
+					<a class="layui-btn layui-btn-danger" th:href="@{/checklive(id=${temp.id},typename=${temp.typename})}">确认入住</a>
+
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+		<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+	<script>
+		//Demo
+		layui.use('form', function(){
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formDemo)', function(data){
+				layer.msg(JSON.stringify(data.field));
+				return false;
+			});
+		});
+	</script>
+		<!--
+		<script>
+			function deleteRoom(RoomId) {
+				//弹出询问框
+				layer.confirm("确认要删除该信息吗?",function (index) {
+					alert("index="+index);
+					$ajax({
+						type:'post',
+						url:'/delete/'+RoomId,
+						dataType:'text',
+						success:function (data) {
+							alert("data="+data);
+							location.href="/rooms";
+						}
+					})
+
+				})
+			}
+		</script>
+		-->
+	</body>
+
+</html>
